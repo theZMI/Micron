@@ -62,7 +62,6 @@
     $g_config['isLoadInMainTpl']  = true;
 
     $g_config['useModRewrite']    = is_readable(BASEPATH . '.htaccess');
-
     $g_config['startExecTime']    = microtime(true);
 
     // Получать ли тайтл автоматически из h1 если не было установлено до этого
