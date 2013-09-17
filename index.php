@@ -8,7 +8,7 @@
 
 
     // Режим работы сайта (Debug || Production)
-    define('DEBUG_MODE', 0);//(bool)(strpos($_SERVER["REMOTE_ADDR"], "127.0.0.") === 0 || strpos($_SERVER["REMOTE_ADDR"], "192.168.0.") === 0));
+    define('DEBUG_MODE', (bool)(strpos($_SERVER["REMOTE_ADDR"], "127.0.0.") === 0 || strpos($_SERVER["REMOTE_ADDR"], "192.168.0.") === 0));
     // Режим вывода ошибок по идёт инициализация движка, после перенастроится на параметр $g_config['phpIni']['display_errors']
     ini_set('display_errors', DEBUG_MODE);
 
