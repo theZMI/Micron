@@ -123,6 +123,8 @@
                                                     $this->idField,
                                                     $this->id
                                                );
+
+                        $this->dataStart = $this->data;
                     }
 
                     $ret = $this->id;
