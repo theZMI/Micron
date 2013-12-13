@@ -31,7 +31,7 @@
  * Parsing code is partially grabbed from PEAR DB class,
  * initial author: Tomas V.V.Cox <cox@idecnet.com>.
  *
- * �ontains 3 classes:
+ * Contains 3 classes:
  * - DbSimple_Generic: database factory class
  * - DbSimple_Generic_Database: common database methods
  * - DbSimple_Generic_Blob: common BLOB support
@@ -146,7 +146,7 @@ class DbSimple_Generic
      * Parse a data source name.
      * See parse_url() for details.
      */
-    function parseDSN($dsn)
+    static function parseDSN($dsn)
     {
         if (is_array($dsn)) return $dsn;
         $parsed = @parse_url($dsn);
