@@ -105,7 +105,7 @@
                                 <td><?= number_format($totalTime, 5, '.', ' ')?></td>
                             </tr>
                     </table>
-                <?
+                <?php
             return ob_get_clean();
         }
     };
