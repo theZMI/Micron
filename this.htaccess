@@ -1,5 +1,5 @@
 Options -Indexes
 RewriteEngine on
 RewriteBase /
-RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|sitemap\.xml|i/.*|tmp/.*|upl/.*)
+RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|sitemap\.xml|i/.*|tmp/.*|upl/.*|lib/ckeditor4/.*)
 RewriteRule ^(.*)$ /index.php?q=$1 [L,QSA]
