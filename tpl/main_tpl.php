@@ -19,8 +19,10 @@
         <link rel="stylesheet" type="text/css" href="<?= Root('i/css/normalize.css')?>" />
         <link rel="stylesheet" type="text/css" href="<?= Root('i/css/dev/funcs.css')?>" />
         <link rel="stylesheet" type="text/css" href="<?= Root('i/css/main.css')?>" />
+        
         <!-- Cледующая строчка будут заменена на подключение объединенных css и js файлов. Не удалять её! -->
         <!-- extraPacker -->
+        
         <?php IncludeCom('dev/jquery')?>
     </head>
     <body>
