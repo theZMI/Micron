@@ -14,7 +14,7 @@
 
     function PhoneFilter($phone)
     {
-        return preg_replace("~[^\+|^0-9]~is", '', $phone);
+        return preg_replace("~[^\+\*|^0-9]~is", '', $phone);
     }
 
     function IsValidPhone($phone)
