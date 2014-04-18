@@ -182,7 +182,7 @@
 
         $dir  = SITE_IN_DIR ? (SITE_IN_DIR . '/') : '';
         $lang = LANG == DEF_LANG ? '' : (LANG . '/');
-        $ret  = $lang || $uri ? "/{$dir}?q={$lang}{$uri}" : $dir;
+        $ret  = $lang || $uri ? "/{$dir}?q={$lang}{$uri}" : "/{$dir}";
         $ret  = empty($ret) ? '/' : $ret;
         $ret  = $g_config['useModRewrite'] ?
                     _StrReplaceFirst('/?q=', '/', _StrReplaceFirst('&', '?', $ret)) :
