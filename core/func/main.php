@@ -180,7 +180,7 @@
     {
         global $g_config;
 
-        $dir  = SITE_IN_DIR ? (SITE_IN_DIR . '/') : '';
+        $dir  = SITE_IN_DIR ? ('/' . SITE_IN_DIR . '/') : '';
         $lang = LANG == DEF_LANG ? '' : (LANG . '/');
         $ret  = $lang || $uri ? "/{$dir}?q={$lang}{$uri}" : $dir;
         $ret  = empty($ret) ? '/' : $ret;
