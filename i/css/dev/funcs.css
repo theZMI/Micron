@@ -56,7 +56,7 @@
             -ms-opacity: @val;
              -o-opacity: @val;
                 opacity: @val;
-        filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100 * @val);
+        filter: e(%("progid:DXImageTransform.Microsoft.Alpha(opacity=100 * @size)"));
         zoom:1;
     }
 
