@@ -109,7 +109,7 @@
         $q     = is_null($q) ? (isset($_GET['q']) && !empty($_GET['q']) ? rtrim($_GET['q'], "/") : $defPage) : $q;
         $q     = _StrReplaceFirst('&', '?', $q);
         $parse = parse_url($q);
-        $q     = FileSys::FilenameSecurity($parse['path']);
+        $q     = isset($parse['path']) ? FileSys::FilenameSecurity($parse['path']) : "";
         if (isset($parse['query']))
         {
             foreach (explode('&', $parse['query']) as $elem)
