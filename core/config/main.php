@@ -52,6 +52,10 @@
     $g_config['extrapacker']['packHtml']               = false;
     $g_config['extrapacker']['packCss']                = true;
     $g_config['extrapacker']['packJs']                 = true;
+
+    $g_config['extrapacker']['removeDubCss']           = true; // Убрать повторяющиеся css/less файлы. Работает только когда packCss = false
+    $g_config['extrapacker']['removeDubJs']            = true; // Убрать повторяющиеся js       файлы. Работает только когда packJs = false
+    
     $g_config['extrapacker']['arrExeptions_js']        = array();
     $g_config['extrapacker']['arrExeptionsNotAdd_js']  = array();
     $g_config['extrapacker']['arrExeptions_css']       = array();
