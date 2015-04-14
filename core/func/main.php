@@ -247,6 +247,8 @@
                                             $cfg['packHtml'],
                                             $cfg['packCss'],
                                             $cfg['packJs'],
+                                            $cfg['removeDubCss'],
+                                            $cfg['removeDubJs'],
                                             $cfg['arrExeptions_js'],
                                             $cfg['arrExeptionsNotAdd_js'],
                                             $cfg['arrExeptions_css'],
