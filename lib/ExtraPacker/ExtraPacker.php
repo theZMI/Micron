@@ -390,18 +390,7 @@
 
             $arrJsFiles = $this->UnickList($arrJsFiles);
 
-            if ($this->flgRemoveDubJs)
-            {
-                $inc = '';
-                foreach ($arrJsFiles as $js)
-                {
-                    $file = call_user_func($this->pFuncGetAddrJsPackFile, $js['addr']);
-                    $inc .= '<script type="text/javascript" charset="UTF-8" src="' . $file . '"></script>' . PHP_EOL;
-                }
-
-                $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . $inc, $html);
-            }
-            else
+            if ($this->flgJsPack)
             {
                 if (file_exists($this->addrJsCacheFileInfo))
                 {
@@ -433,6 +422,17 @@
                
                 $inc  = call_user_func($this->pFuncGetAddrJsPackFile, $includeFileAddr);
                 $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . '<script type="text/javascript" charset="UTF-8" src="' . $inc . '"></script>', $html);
+            }
+            else
+            {
+                $inc = '';
+                foreach ($arrJsFiles as $js)
+                {
+                    $file = call_user_func($this->pFuncGetAddrJsPackFile, $js['addr']);
+                    $inc .= '<script type="text/javascript" charset="UTF-8" src="' . $file . '"></script>' . PHP_EOL;
+                }
+
+                $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . $inc, $html);
             }
 
             return $html;
@@ -539,18 +539,7 @@
 
             $arrCssFiles = $this->UnickList($arrCssFiles);
 
-            if ($this->flgRemoveDubJs)
-            {
-                $inc = '';
-                foreach ($arrCssFiles as $css)
-                {
-                    $file = call_user_func($this->pFuncGetAddrCssPackFile, $css['addr']);
-                    $inc .= '<link rel="stylesheet" charset="UTF-8" type="text/css" href="' . $file . '" />' . PHP_EOL;
-                }
-
-                $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . $inc, $html);
-            }
-            else
+            if ($this->flgCssPack)
             {
                 if (file_exists($this->addrCssCacheFileInfo))
                 {
@@ -582,6 +571,17 @@
                
                 $inc  = call_user_func($this->pFuncGetAddrCssPackFile, $includeFileAddr);
                 $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . '<link rel="stylesheet" charset="UTF-8" type="text/css" href="' . $inc . '" />', $html);
+            }
+            else
+            {
+                $inc = '';
+                foreach ($arrCssFiles as $css)
+                {
+                    $file = call_user_func($this->pFuncGetAddrCssPackFile, $css['addr']);
+                    $inc .= '<link rel="stylesheet" charset="UTF-8" type="text/css" href="' . $file . '" />' . PHP_EOL;
+                }
+
+                $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . $inc, $html);
             }
             return $html;
         }
