@@ -37,6 +37,8 @@
         private $flgHtmlPack;
         private $flgCssPack;
         private $flgJsPack;
+        private $flgRemoveDubCss;
+        private $flgRemoveDubJs;
         private $flgUseTransSystem;
         private $gzipPostfix             = '.gz';
         private $pCallBackFunctionJS     = NULL;
@@ -357,6 +359,20 @@
                 return $html;
             }
 
+            // Убираем из пака скрипты помеченные аттрибутом m-not-add
+            $mn1 = array();
+            preg_match_all("~<script.*?m-not-add.*?src=['\"](.*?).js['\"].*?></script>~", $s, $mn1);
+            $mn2 = array();
+            preg_match_all("~<script.*?src=['\"](.*?).js['\"].*?m-not-add.*?></script>~", $s, $mn2);
+            if (!empty($mn1) || !empty($mn2))
+            {
+                $mn = array_merge(@$mn1[1], @$mn2[1]);
+                foreach ($mn as $mnf)
+                {
+                    $arrExeptionsNotAdd[] = $mnf . ".js";
+                }
+            }
+
             $arrJsFiles = array();
             foreach ($m[1] as $k => $jsAddr)
             {
@@ -374,36 +390,50 @@
 
             $arrJsFiles = $this->UnickList($arrJsFiles);
 
-            if (file_exists($this->addrJsCacheFileInfo))
+            if ($this->flgRemoveDubJs)
             {
-                $strInfoJsFiles = file_get_contents($this->addrJsCacheFileInfo);
-                $arrInfoJsFiles = unserialize($strInfoJsFiles);
-                if ($this->NeedRePack($arrInfoJsFiles, $arrJsFiles))
+                $inc = '';
+                foreach ($arrJsFiles as $js)
                 {
-                    if (self::ALWAYS_INDEPENDENT_PACK)
-                    {
-                        $arrInfoJsFiles = array();
-                    }
-                    $arrAllJsFiles = self::AUnique(self::AMerge($arrInfoJsFiles, $arrJsFiles));
-                    self::WriteDataInCache('js', $arrAllJsFiles, $arrExeptions);
+                    $file = call_user_func($this->pFuncGetAddrJsPackFile, $js['addr']);
+                    $inc .= '<script type="text/javascript" charset="UTF-8" src="' . $file . '"></script>' . PHP_EOL;
                 }
-                else
-                {
-                    if ($this->flgUseTransSystem)
-                    {
-                        $this->addrJsCacheFile = str_replace(".js", self::GetTrans('js') . ".js", $this->addrJsCacheFile);
-                    }
-                }
+
+                $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . $inc, $html);
             }
             else
             {
-                self::WriteDataInCache('js', $arrJsFiles , $arrExeptions);
+                if (file_exists($this->addrJsCacheFileInfo))
+                {
+                    $strInfoJsFiles = file_get_contents($this->addrJsCacheFileInfo);
+                    $arrInfoJsFiles = unserialize($strInfoJsFiles);
+                    if ($this->NeedRePack($arrInfoJsFiles, $arrJsFiles))
+                    {
+                        if (self::ALWAYS_INDEPENDENT_PACK)
+                        {
+                            $arrInfoJsFiles = array();
+                        }
+                        $arrAllJsFiles = self::AUnique(self::AMerge($arrInfoJsFiles, $arrJsFiles));
+                        self::WriteDataInCache('js', $arrAllJsFiles, $arrExeptions);
+                    }
+                    else
+                    {
+                        if ($this->flgUseTransSystem)
+                        {
+                            $this->addrJsCacheFile = str_replace(".js", self::GetTrans('js') . ".js", $this->addrJsCacheFile);
+                        }
+                    }
+                }
+                else
+                {
+                    self::WriteDataInCache('js', $arrJsFiles, $arrExeptions);
+                }
+               
+                $includeFileAddr = ($this->flgBuffering && $this->flgUseGZIP) ? $this->addrJsCacheFile.$this->gzipPostfix : $this->addrJsCacheFile;
+               
+                $inc  = call_user_func($this->pFuncGetAddrJsPackFile, $includeFileAddr);
+                $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . '<script type="text/javascript" charset="UTF-8" src="' . $inc . '"></script>', $html);
             }
-
-            $includeFileAddr = ($this->flgBuffering && $this->flgUseGZIP) ? $this->addrJsCacheFile.$this->gzipPostfix : $this->addrJsCacheFile;
-
-            $inc  = call_user_func($this->pFuncGetAddrJsPackFile, $includeFileAddr);
-            $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . '<script type="text/javascript" charset="UTF-8" src="' . $inc . '"></script>', $html);
 
             return $html;
         }
@@ -476,6 +506,21 @@
                 return $html;
             }
 
+            // Убираем из пака скрипты помеченные аттрибутом m-not-add
+            $mn1 = array();
+            preg_match_all("~<link.*?m-not-add.*?href=['\"](.*?)\.(css|less)['\"].*?>~", $s, $mn1);
+            $mn2 = array();
+            preg_match_all("~<link.*?href=['\"](.*?)\.(css|less)['\"].*?m-not-add.*?>~", $s, $mn2);
+            if (!empty($mn1) || !empty($mn2))
+            {
+                $mn  = array_merge(@$mn1[1], @$mn2[1]);
+                $ext = array_merge(@$mn1[2], @$mn2[2]);
+                foreach ($mn as $k => $mnf)
+                {
+                    $arrExeptionsNotAdd[] = $mnf . "." . $ext[$k];
+                }
+            }
+
             $arrCssFiles = array();
             foreach ($m[1] as $k => $cssAddr)
             {
@@ -494,37 +539,50 @@
 
             $arrCssFiles = $this->UnickList($arrCssFiles);
 
-            if (file_exists($this->addrCssCacheFileInfo))
+            if ($this->flgRemoveDubJs)
             {
-                $strInfoCssFiles = file_get_contents($this->addrCssCacheFileInfo);
-                $arrInfoCssFiles = unserialize($strInfoCssFiles);
-                if ($this->NeedRePack($arrInfoCssFiles, $arrCssFiles))
+                $inc = '';
+                foreach ($arrCssFiles as $css)
                 {
-                    if (self::ALWAYS_INDEPENDENT_PACK)
-                    {
-                        $arrInfoCssFiles = array();
-                    }
-                    $arrAllCssFiles = self::AUnique(self::AMerge($arrInfoCssFiles, $arrCssFiles));
-                    self::WriteDataInCache('css', $arrAllCssFiles, $arrExeptions);
+                    $file = call_user_func($this->pFuncGetAddrCssPackFile, $css['addr']);
+                    $inc .= '<link rel="stylesheet" charset="UTF-8" type="text/css" href="' . $file . '" />' . PHP_EOL;
                 }
-                else
-                {
-                    if ($this->flgUseTransSystem)
-                    {
-                        $this->addrCssCacheFile = str_replace(".css", self::GetTrans('css') . ".css", $this->addrCssCacheFile);
-                    }
-                }
+
+                $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . $inc, $html);
             }
             else
             {
-                self::WriteDataInCache('css', $arrCssFiles , $arrExeptions);
+                if (file_exists($this->addrCssCacheFileInfo))
+                {
+                    $strInfoCssFiles = file_get_contents($this->addrCssCacheFileInfo);
+                    $arrInfoCssFiles = unserialize($strInfoCssFiles);
+                    if ($this->NeedRePack($arrInfoCssFiles, $arrCssFiles))
+                    {
+                        if (self::ALWAYS_INDEPENDENT_PACK)
+                        {
+                            $arrInfoCssFiles = array();
+                        }
+                        $arrAllCssFiles = self::AUnique(self::AMerge($arrInfoCssFiles, $arrCssFiles));
+                        self::WriteDataInCache('css', $arrAllCssFiles, $arrExeptions);
+                    }
+                    else
+                    {
+                        if ($this->flgUseTransSystem)
+                        {
+                            $this->addrCssCacheFile = str_replace(".css", self::GetTrans('css') . ".css", $this->addrCssCacheFile);
+                        }
+                    }
+                }
+                else
+                {
+                    self::WriteDataInCache('css', $arrCssFiles , $arrExeptions);
+                }
+               
+                $includeFileAddr = ($this->flgBuffering && $this->flgUseGZIP) ? $this->addrCssCacheFile.$this->gzipPostfix : $this->addrCssCacheFile;
+               
+                $inc  = call_user_func($this->pFuncGetAddrCssPackFile, $includeFileAddr);
+                $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . '<link rel="stylesheet" charset="UTF-8" type="text/css" href="' . $inc . '" />', $html);
             }
-
-            $includeFileAddr = ($this->flgBuffering && $this->flgUseGZIP) ? $this->addrCssCacheFile.$this->gzipPostfix : $this->addrCssCacheFile;
-
-            $inc  = call_user_func($this->pFuncGetAddrCssPackFile, $includeFileAddr);
-            $html = str_ireplace(self::TAG_EXTRAPACKER, self::TAG_EXTRAPACKER . '<link rel="stylesheet" charset="UTF-8" type="text/css" href="' . $inc . '" />', $html);
-
             return $html;
         }
 
@@ -583,11 +641,11 @@
                 return $html;
             }
 
-            if ($this->flgJsPack)
+            if ($this->flgJsPack || $this->flgRemoveDubJs)
             {
                 $html = $this->JsPack($html);
             }
-            if ($this->flgCssPack)
+            if ($this->flgCssPack || $this->flgRemoveDubCss)
             {
                 $html = $this->CssPack($html);
             }
@@ -638,6 +696,8 @@
                                         $flgHtmlPack            = true,
                                         $flgCssPack             = true,
                                         $flgJsPack              = true,
+                                        $flgRemoveDubCss        = true,
+                                        $flgRemoveDubJs         = true,
                                         $arrExeptions_js        = array(),
                                         $arrExeptionsNotAdd_js  = array(),
                                         $arrExeptions_css       = array(),
@@ -669,6 +729,9 @@
             $this->flgHtmlPack             = $flgHtmlPack;
             $this->flgCssPack              = $flgCssPack;
             $this->flgJsPack               = $flgJsPack;
+
+            $this->flgRemoveDubCss         = $flgRemoveDubCss;
+            $this->flgRemoveDubJs          = $flgRemoveDubJs;
 
             $this->arrExeptions_js         = $arrExeptions_js;
             $this->arrExeptionsNotAdd_js   = $arrExeptionsNotAdd_js;
