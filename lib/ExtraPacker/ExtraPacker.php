@@ -3,7 +3,8 @@
     require_once dirname(__FILE__) . "/Lib/CssPacker.php";
     require_once dirname(__FILE__) . "/Lib/HtmlPacker.php";
     require_once dirname(__FILE__) . "/Lib/JSMin.php";
-    require_once dirname(__FILE__) . "/Lib/lessc.inc.php";
+    require_once dirname(__FILE__) . "/Lib/lessc.inc.php"; // Базовый компилятор. Быстрый, но не работает с новыми версиями Бустрапа.
+    require_once dirname(__FILE__) . "/Lib/less.php";      // Более новый и актуальный компилятор. Работает хорошо, но медленно.
 
 
     /**
@@ -292,9 +293,28 @@
             }
             else
             {
+                // ** Компилятор #1. Базовый компилятор. Быстрый, но не работает с новыми версиями Бустрапа.
+                //*
                 $less = new lessc();
                 $less->importDir = BASEPATH . 'i/css/';
                 $fullContent     = $less->parse($fullContent);
+                //*/
+
+                // ** Компилятор #2. Более новый и актуальный компилятор. Работает хорошо, но медленно.
+                /*
+                $parser = new Less_Parser();
+                $parser->SetImportDirs
+                (
+                    array
+                    (
+                        BASEPATH . 'i/css/',
+                        BASEPATH . 'i/css/dev/bootstrap3',
+                        BASEPATH . 'i/css/_dev/bootstrap3'
+                    )
+                );
+                $parser->parse($fullContent);
+                $fullContent = $parser->getCss();
+                //*/
 
                 if (!self::ONLY_MERGE_CSS)
                 {
