@@ -1,7 +1,7 @@
 
     <!-- Вот так в микроне можно подключать css и js в общий сборщик именно с этой страницы -->
     <head>
-        <link rel="stylesheet" type="text/css" href="<?= Root('i/css/home.less')?>" />
+        <link rel="stylesheet" type="less/css" href="<?= Root('i/css/home.less')?>" />
     </head>
 
 
