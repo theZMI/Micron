@@ -1,7 +1,7 @@
 
     <?php IncludeCom('dev/jquery')?>
     <head>
-        <link rel="stylesheet" type="text/css" href="<?= Root('i/css/dev/msg.css')?>" />
+        <link rel="stylesheet" type="text/css" href="<?= Root('i/css/dev/msg.less')?>" />
         <script type="text/javascript" src="<?= Root('i/js/dev/msg.js')?>"></script>
     </head>
 
