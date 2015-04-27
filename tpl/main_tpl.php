@@ -17,8 +17,8 @@
         <meta http-equiv="cleartype" content="on">
 
         <link rel="stylesheet" type="text/css" href="<?= Root('i/css/normalize.css')?>" />
-        <link rel="stylesheet" type="text/css" href="<?= Root('i/css/dev/funcs.css')?>" />
-        <link rel="stylesheet" type="text/css" href="<?= Root('i/css/main.css')?>" />
+        <link rel="stylesheet" type="text/css" href="<?= Root('i/css/dev/funcs.less')?>" />
+        <link rel="stylesheet" type="text/css" href="<?= Root('i/css/main.less')?>" />
 
         <!-- Следущая строчка нужна для обозначения места вставки объеденённых css/js файлов. Её не следует удалять.-->
         <!-- extraPacker -->
