@@ -12,11 +12,12 @@
     define('DOMAIN_COOKIE', '');
 
     // Массив языков сайта
-    define('DEF_LANG', 'en');
-    $g_arrLangs = array(
-                          'en' => array('name' => 'English'),
-                          'ru' => array('name' => 'Русский')
-                       );
+    define('DEF_LANG', 'ru');
+    $g_arrLangs = array
+                  (
+                      //'en' => array('name' => 'English'),
+                      'ru' => array('name' => 'Русский')
+                  );
 
     $g_config                     = array();
     $g_config['mainTpl']          = 'main_tpl';
