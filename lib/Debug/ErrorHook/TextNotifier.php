@@ -53,7 +53,7 @@ abstract class Debug_ErrorHook_TextNotifier implements Debug_ErrorHook_INotifier
         if ($this->_whatToLog & self::LOG_POST) {
             $body[] = $this->_makeSection("POST", Debug_ErrorHook_Util::varExport($_POST));
         }
-        if ($this->_whatToLog & self::LOG_SESSION) {
+        if ($this->_whatToLog & self::LOG_SESSION && !empty($_SESSION)) {
             $body[] = $this->_makeSection("SESSION", Debug_ErrorHook_Util::varExport(@$_SESSION));
         }
         // Append body suffix?
