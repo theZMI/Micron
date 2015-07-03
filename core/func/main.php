@@ -320,7 +320,17 @@
         {
             if ($k == 'q') continue;
             if ($v == M_DELETE_PARAM) continue;
-            $pars .= ("{$k}=" . urlencode($v) . "&");
+            if (is_array($v))
+            {
+                foreach ($v as $k1 => $v1)
+                {
+                    $pars .= ("{$k}[{$k1}]=" . urlencode($v1) . "&");
+                }
+            }
+            else
+            {
+                $pars .= ("{$k}=" . urlencode($v) . "&");
+            }
         }
         $pars = substr($pars, 0, -1) ? ('&' . substr($pars, 0, -1)) : '';
         return SiteRoot(GetQuery() . $pars);
