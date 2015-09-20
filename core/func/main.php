@@ -106,7 +106,7 @@
 
         require_once BASEPATH . 'lib/InputClean.php';
 
-        $q     = is_null($q) ? (isset($_GET['q']) && !empty($_GET['q']) ? rtrim($_GET['q'], "/") : $defPage) : $q;
+        $q     = is_null($q) ? (isset($_GET['q']) && !empty($_GET['q']) ? trim($_GET['q'], "/") : $defPage) : $q;
         $q     = _StrReplaceFirst('&', '?', $q);
         $parse = parse_url($q);
         $q     = isset($parse['path']) ? FileSys::FilenameSecurity($parse['path']) : "";
