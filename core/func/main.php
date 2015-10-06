@@ -12,6 +12,9 @@
     define('M_XSS_FILTER_OFF',  4); // Выкл. защиту от XSS вставок
     define('M_DELETE_PARAM', 'micron_not_use_this_param__98gmkhgKfdg');
 
+    // Для совместимости со старыми компонентами
+    define("M_CLEAN_PARAM_NO_HTML", M_HTML_FILTER_OFF);
+    define("M_CLEAN_PARAM_NO_XSS",  M_XSS_FILTER_OFF);
 
     // Производит замену только 1-го вхождения подстроки в строку
     function _StrReplaceFirst($search, $replace, $subject)
